@@ -17,18 +17,22 @@
 | 📜 Audit Log | Фиксация версии модели, промпта и метаданных | Traceability для судов и внутреннего аудита банка |
 
 ## 🏗 Архитектура
-```mermaid
-flowchart TD
-    A[User] -->|Request| B[API Gateway]
-    B --> C{Orchestrator}
-    C -->|1. Retrieve| D[(Local Docs)]
-    C -->|2. Generate| E[YandexGPT]
-    C -->|3. Validate| F[Pydantic Validator]
-    F -->|Pass| G[Response + Checklist]
-    F -->|Flag| H[Human Review]
-    G --> I[Audit Log]
-    classDef compliance fill:#e3f2fd,stroke:#1976d2;
-    class F,I compliance;
+
+**Компоненты системы:**
+- **API Gateway** (FastAPI) — принимает запросы от юриста/compliance-специалиста
+- **Orchestrator** — управляет потоком: RAG → LLM → Validator
+- **RAG Engine** — поиск по локальным документам (кодексы, практика)
+- **YandexGPT Lite** — генерация черновика с цитатами
+- **Pydantic Validator** — детерминированная проверка сроков и реквизитов
+- **Audit Log** — фиксация всех действий для compliance
+
+**Поток данных:**
+1. Пользователь отправляет запрос → API Gateway
+2. Orchestrator ищет релевантные нормы в RAG
+3. YandexGPT генерирует черновик с цитатами
+4. Validator проверяет сроки (ст. 196 ГК РФ), подсудность, реквизиты
+5. Если всё OK → ответ + чек-лист; если есть риски → флаг на ручную проверку
+6. Всё логируется в Audit Store (требование 152-ФЗ);
 
 🛠 Стек
 LLM: YandexGPT Lite (on-prem/cloud ready)
