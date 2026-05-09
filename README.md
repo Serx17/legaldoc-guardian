@@ -19,14 +19,14 @@
 ## 🏗 Архитектура
 ```mermaid
 flowchart TD
-    A[Юрист / Compliance] -->|Ввод данных| B(API Gateway)
+    A[User] -->|Request| B[API Gateway]
     B --> C{Orchestrator}
-    C -->|1. Поиск норм| D[(RAG: Local Docs)]
-    C -->|2. Генерация| E[YandexGPT Lite]
-    C -->|3. Проверка| F[Pydantic Validator]
-    F -->|✅ Pass| G[Документ + Чек-лист]
-    F -->|⚠️ Flag| H[Human-in-the-Loop]
-    G --> I[Audit Store]
+    C -->|1. Retrieve| D[(Local Docs)]
+    C -->|2. Generate| E[YandexGPT]
+    C -->|3. Validate| F[Pydantic Validator]
+    F -->|Pass| G[Response + Checklist]
+    F -->|Flag| H[Human Review]
+    G --> I[Audit Log]
     classDef compliance fill:#e3f2fd,stroke:#1976d2;
     class F,I compliance;
 
