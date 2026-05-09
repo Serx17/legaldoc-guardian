@@ -55,6 +55,8 @@ Production (Docker)
 
 docker compose up --build
 
+https://github.com/Serx17/legaldoc-guardian/blob/main/FastApi.jpg
+
 📜 Комплаенс & Безопасность (РФ 2026)
 ✅ Данные не покидают контур (local-first architecture)
 ✅ Audit trail хранит: prompt_hash, model_version, validation_result
